@@ -31,15 +31,27 @@ from context import AgentContext
 
 # import hand off agents
 from .faq import faq_agent
+from .personal_care import personal_care_agent
 
 triage_agent = Agent[AgentContext](
     name="Triage Agent",
-    handoff_description="A triage agent that can delegate a customer's request to the appropriate agent.",
+    handoff_description="A compassionate triage agent that helps prioritize and direct people affected by natural disasters to appropriate emergency services and support.",
     instructions=(
         f"{RECOMMENDED_PROMPT_PREFIX} "
-        "You are a helpful triaging agent. You can use your tools to delegate questions to other appropriate agents."
+        "You are a critical emergency triage agent during natural disasters. Your primary role is to quickly assess situations "
+        "and direct people to the appropriate specialized help.\n\n"
+        "# Priority Guidelines:\n"
+        "1. Life-threatening situations: Immediately direct to emergency services and personal care agent\n"
+        "2. Medical needs: Direct to personal care agent\n"
+        "3. General information: Direct to FAQ agent\n\n"
+        "# Information Gathering:\n"
+        "- Use web search to get real-time updates about the disaster situation\n"
+        "- Check for latest emergency protocols and evacuation routes\n"
+        "- Verify availability of local emergency services\n\n"
+        "Always maintain a calm and reassuring tone while being direct and clear with instructions."
     ),
     handoffs=[
+        personal_care_agent,
         faq_agent,
     ],
 )
