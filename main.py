@@ -3,7 +3,6 @@ from __future__ import annotations as _annotations
 import asyncio
 import random
 import uuid
-import time
 
 from pydantic import BaseModel
 
@@ -34,7 +33,6 @@ from context import AgentContext
 from agent_defs.triage import triage_agent
 from agent_defs.faq import faq_agent
 from agent_defs.personal_care import personal_care_agent
-from agent_defs.disaster_info_agg import disaster_info_agg_agent
 
 
 # Load the environment variables for the script
@@ -60,13 +58,7 @@ async def main():
     # Here, we'll just use a random UUID for the conversation ID
     conversation_id = uuid.uuid4().hex[:16]
 
-    t = time.time()
     while True:
-
-        if time.time() - t > 15:  # update 15min in 15s: 60x speedup
-            _ = await Runner.run(disaster_info_agg_agent, [], context=context)
-            t = time.time()
-
         user_input = input("Enter your message: ")
         with trace("Disaster Relief", group_id=conversation_id):
             input_items.append({"content": user_input, "role": "user"})
