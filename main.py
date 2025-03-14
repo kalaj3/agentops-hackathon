@@ -30,7 +30,7 @@ from agents.extensions.handoff_prompt import RECOMMENDED_PROMPT_PREFIX
 from context import AgentContext
 
 # import agents
-from agents.triage import triage_agent
+from agent_defs.triage import triage_agent
 
 
 # Load the environment variables for the script
