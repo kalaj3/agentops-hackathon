@@ -21,7 +21,7 @@ class AgentContext(BaseModel):
 
     - **08:30 AM – Impact Near Airports**  
     _"Volcanic Ash Cloud Approaching International Airport"_  
-    Reports indicate the ash cloud is nearing one of the region’s busiest airports, raising concerns about engine safety and visibility.
+    Reports indicate the ash cloud is nearing one of the region's busiest airports, raising concerns about engine safety and visibility.
 
     - **08:45 AM – Flight Rerouting Begins**  
     _"Emergency Advisory: Non-Essential Flights Rerouted or Grounded"_  
@@ -41,7 +41,7 @@ class AgentContext(BaseModel):
 
     - **10:00 AM – International Impact**  
     _"Airspace Declared Hazardous: International Flight Routes Disrupted"_  
-    The ash cloud’s movement forces neighboring countries to close parts of their airspace, impacting transcontinental flights and travel plans worldwide.
+    The ash cloud's movement forces neighboring countries to close parts of their airspace, impacting transcontinental flights and travel plans worldwide.
 
     - **11:00 AM – Regional Updates**  
     _"Ash Cloud Drifting Westward; Impact Extends to Neighboring Regions"_  
@@ -81,4 +81,5 @@ class AgentContext(BaseModel):
     """
 
     i_news: int = 0
+    available_responders: int = 5  # Starting with 5 available responders
 

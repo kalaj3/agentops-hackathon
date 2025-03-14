@@ -33,7 +33,7 @@ from context import AgentContext
 from agent_defs.triage import triage_agent
 from agent_defs.faq import faq_agent
 from agent_defs.personal_care import personal_care_agent
-
+from agent_defs.responder_coordinator import responder_coordinator_agent
 
 # Load the environment variables for the script
 load_dotenv()
@@ -42,9 +42,38 @@ load_dotenv()
 AGENTOPS_API_KEY = os.getenv("AGENTOPS_API_KEY")
 agentops.init(api_key=AGENTOPS_API_KEY)
 
-# init agent hand off here to avoid circular imports
-faq_agent.handoffs.append(triage_agent)
-personal_care_agent.handoffs.append(triage_agent)
+# Update agent instructions with handoff guidelines
+faq_agent.instructions = f"""{faq_agent.instructions}
+    # Additional Handoff Guidelines
+    - If user mentions any injuries or medical concerns, transfer to personal_care_agent
+    - If situation seems critical or life-threatening, transfer to responder_coordinator_agent
+    - For complex disaster coordination needs, transfer to triage_agent"""
+
+personal_care_agent.instructions = f"""{personal_care_agent.instructions}
+    # Additional Handoff Guidelines
+    - If situation is life-threatening or requires immediate response, transfer to responder_coordinator_agent
+    - For general disaster information, transfer to faq_agent
+    - For complex coordination needs, transfer to triage_agent"""
+
+responder_coordinator_agent.instructions = f"""{responder_coordinator_agent.instructions}
+    # Additional Handoff Guidelines
+    - When no responders are available, transfer to personal_care_agent for first aid guidance
+    - For non-urgent situations, transfer to faq_agent
+    - For complex coordination or when situation changes, transfer to triage_agent"""
+
+triage_agent.instructions = f"""{triage_agent.instructions}
+    # Detailed Handoff Guidelines
+    1. Life-threatening emergencies: Transfer to responder_coordinator_agent
+    2. Medical needs and injuries: Transfer to personal_care_agent
+    3. General disaster information: Transfer to faq_agent
+    
+    Always assess severity first and prioritize immediate threats to life."""
+
+# init agent handoffs here to avoid circular imports
+faq_agent.handoffs = [personal_care_agent, responder_coordinator_agent, triage_agent]
+personal_care_agent.handoffs = [responder_coordinator_agent, faq_agent, triage_agent]
+responder_coordinator_agent.handoffs = [personal_care_agent, faq_agent, triage_agent]
+triage_agent.handoffs = [responder_coordinator_agent, personal_care_agent, faq_agent]
 
 ### RUN
 
