@@ -9,3 +9,5 @@ class AgentContext(BaseModel):
 
 
 
+    i_news: int = 0
+
