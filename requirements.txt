@@ -1,3 +1,4 @@
 agentops
-openai-agent
+openai-agents
 dotenv
+colorama

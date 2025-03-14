@@ -77,18 +77,20 @@ triage_agent.handoffs = [responder_coordinator_agent, personal_care_agent, faq_a
 
 ### RUN
 
+from colorama import init, Fore, Style
+
+# Initialize colorama for cross-platform color support
+init()
 
 async def main():
     current_agent: Agent[AgentContext] = triage_agent
     input_items: list[TResponseInputItem] = []
     context = AgentContext()
 
-    # Normally, each input from the user would be an API request to your app, and you can wrap the request in a trace()
-    # Here, we'll just use a random UUID for the conversation ID
     conversation_id = uuid.uuid4().hex[:16]
 
     while True:
-        user_input = input("Enter your message: ")
+        user_input = input(f"{Fore.GREEN}Enter your message: {Style.RESET_ALL}")
         with trace("Disaster Relief", group_id=conversation_id):
             input_items.append({"content": user_input, "role": "user"})
             result = await Runner.run(current_agent, input_items, context=context)
@@ -96,15 +98,15 @@ async def main():
             for new_item in result.new_items:
                 agent_name = new_item.agent.name
                 if isinstance(new_item, MessageOutputItem):
-                    print(f"{agent_name}: {ItemHelpers.text_message_output(new_item)}")
+                    print(f"{Fore.BLUE}{agent_name}: {Fore.WHITE}{ItemHelpers.text_message_output(new_item)}{Style.RESET_ALL}")
                 elif isinstance(new_item, HandoffOutputItem):
-                    print(f"Handed off from {new_item.source_agent.name} to {new_item.target_agent.name}")
+                    print(f"{Fore.YELLOW}[SYSTEM] Handed off from {new_item.source_agent.name} to {new_item.target_agent.name}{Style.RESET_ALL}")
                 elif isinstance(new_item, ToolCallItem):
-                    print(f"{agent_name}: Calling a tool")
+                    print(f"{Fore.MAGENTA}[DEBUG] {agent_name}: Calling a tool{Style.RESET_ALL}")
                 elif isinstance(new_item, ToolCallOutputItem):
-                    print(f"{agent_name}: Tool call output: {new_item.output}")
+                    print(f"{Fore.CYAN}[TOOL] {agent_name}: {new_item.output}{Style.RESET_ALL}")
                 else:
-                    print(f"{agent_name}: Skipping item: {new_item.__class__.__name__}")
+                    print(f"{Fore.RED}[WARNING] {agent_name}: Skipping item: {new_item.__class__.__name__}{Style.RESET_ALL}")
             input_items = result.to_input_list()
             current_agent = result.last_agent
 
