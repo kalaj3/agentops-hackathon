@@ -43,11 +43,7 @@ triage_agent = Agent[AgentContext](
         "# Priority Guidelines:\n"
         "1. Life-threatening situations: Immediately direct to emergency services and personal care agent\n"
         "2. Medical needs: Direct to personal care agent\n"
-        "3. General information: Direct to FAQ agent\n\n"
-        "# Information Gathering:\n"
-        "- Use web search to get real-time updates about the disaster situation\n"
-        "- Check for latest emergency protocols and evacuation routes\n"
-        "- Verify availability of local emergency services\n\n"
+        "3. General information: Direct to general info agent\n\n"
         "Always maintain a calm and reassuring tone while being direct and clear with instructions."
     ),
     handoffs=[

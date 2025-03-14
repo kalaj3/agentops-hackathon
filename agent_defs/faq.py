@@ -39,14 +39,17 @@ async def general_info_lookup_tool(context: RunContextWrapper[AgentContext], que
     
 
 faq_agent = Agent[AgentContext](
-    name="FAQ Agent",
-    handoff_description="A helpful agent that can answer questions about the airline.",
+    name="General Info Agent",
+    handoff_description="A helpful agent that can answer questions about the current natural disaster.",
     instructions=f"""{RECOMMENDED_PROMPT_PREFIX}
     You are an FAQ agent. If you are speaking to a customer, you probably were transferred to from the triage agent.
     Use the following routine to support the customer.
     # Routine
     1. Identify the last question asked by the customer.
     2. Use the general info lookup tool to answer the question. Do not rely on your own knowledge.
-    3. If you cannot answer the question, transfer back to the triage agent.""",
+    3. If you cannot answer the question, transfer back to the triage agent.
+    
+    Be sure to be concise. You are having a conversation, not dumping info.
+    """,
     tools=[general_info_lookup_tool],
 )

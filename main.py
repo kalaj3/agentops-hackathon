@@ -31,6 +31,8 @@ from context import AgentContext
 
 # import agents
 from agent_defs.triage import triage_agent
+from agent_defs.faq import faq_agent
+from agent_defs.personal_care import personal_care_agent
 
 
 # Load the environment variables for the script
@@ -41,8 +43,8 @@ AGENTOPS_API_KEY = os.getenv("AGENTOPS_API_KEY")
 agentops.init(api_key=AGENTOPS_API_KEY)
 
 # init agent hand off here to avoid circular imports
-# faq_agent.handoffs.append(triage_agent)
-# seat_booking_agent.handoffs.append(triage_agent)
+faq_agent.handoffs.append(triage_agent)
+personal_care_agent.handoffs.append(triage_agent)
 
 ### RUN
 
