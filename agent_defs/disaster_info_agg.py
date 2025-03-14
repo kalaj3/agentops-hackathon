@@ -163,6 +163,7 @@ async def fake_news_feed_tool(context: RunContextWrapper[AgentContext]) -> str:
 
     news = _NEWS[context.context.i_news]
     if news:
+        context.context.disaster_info += f"\n- {news}"
         return news
     else:
         return "No new development on the situation found in the past 15 minutes."
