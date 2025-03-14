@@ -28,6 +28,7 @@ from agents.extensions.handoff_prompt import RECOMMENDED_PROMPT_PREFIX
 
 # global context
 from context import AgentContext
+from .news import _NEWS
 
 
 @function_tool()
@@ -35,6 +36,10 @@ async def general_info_lookup_tool(context: RunContextWrapper[AgentContext], que
     """
     Get the most update to date disaster relief info
     """
+    if context.context.i_news == 0:
+        for i in range(5):
+            context.context.disaster_info += f"\n- {_NEWS[context.context.i_news]}"
+            context.context.i_news += 1
     return context.context.disaster_info
     
 
